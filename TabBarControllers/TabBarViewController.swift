@@ -7,6 +7,7 @@
 
 import UIKit
 
+//Таббар
 final class TabBarViewController: UITabBarController {
     
     override func viewDidLoad() {

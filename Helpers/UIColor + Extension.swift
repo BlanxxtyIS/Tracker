@@ -8,7 +8,7 @@
 import UIKit
 
 extension UIColor {
-    static var uBlue: UIColor { UIColor(named: "Blue") ?? UIColor.blue }
+    static var udBlue: UIColor { UIColor(named: "Blue") ?? UIColor.blue }
     static var udWhite: UIColor { UIColor(named: "White [day]") ?? UIColor.white }
     static var udBlack: UIColor { UIColor(named: "Black [day]") ?? UIColor.black }
     static var udBackground: UIColor { UIColor(named: "Background") ?? UIColor.systemBackground}

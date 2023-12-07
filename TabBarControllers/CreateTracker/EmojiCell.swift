@@ -9,11 +9,26 @@ import UIKit
 
 class EmojiCell: UICollectionViewCell {
     
+    let identifier = "EmojiCell"
+    
+    var emojiCell: UIImageView = {
+        var emoji = UIImageView()
+        let emojiCell = UIImage(named: "")
+        emoji = UIImageView(image: emojiCell)
+        return emoji
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        contentView.layer.cornerRadius = 8
-        contentView.layer.masksToBounds = true
+        contentView.addSubview(emojiCell)
+        emojiCell.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            emojiCell.heightAnchor.constraint(equalToConstant: 38),
+            emojiCell.widthAnchor.constraint(equalToConstant: 32),
+            emojiCell.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            emojiCell.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)])
     }
     
     required init?(coder: NSCoder) {

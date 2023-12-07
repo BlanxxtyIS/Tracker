@@ -22,6 +22,7 @@ class ScheduleViewController: UIViewController {
         table.isScrollEnabled = false
         table.layer.masksToBounds = true
         table.layer.cornerRadius = 16
+        table.separatorStyle = .singleLine
         table.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMinYCorner, .layerMaxXMaxYCorner]
         table.translatesAutoresizingMaskIntoConstraints = false
         return table
@@ -79,6 +80,9 @@ class ScheduleViewController: UIViewController {
 }
 
 extension ScheduleViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
     
 }
 
@@ -100,22 +104,14 @@ extension ScheduleViewController: UITableViewDataSource {
         let switcher = UISwitch(frame: .zero)
         switcher.setOn(false, animated: true)
         switcher.tag = indexPath.row
+        switcher.onTintColor = .udBlue
         switcher.addTarget(self, action: #selector(self.switchChanged(_:)), for: .valueChanged)
         cell.accessoryView = switcher
         
         cell.heightAnchor.constraint(equalToConstant: 82).isActive = true
-        print(requiredHeight)
         cell.backgroundColor = .udBackground
         return cell
     }
 }
 
-extension ScheduleViewController {
-    public var requiredHeight: CGFloat {
-        let table = scheduleTableView
-        table.sizeToFit()
-        print(table.frame.height)
-        return table.frame.height
-    }
-}
 

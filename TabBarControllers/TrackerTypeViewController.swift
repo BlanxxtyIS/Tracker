@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+//Трекеры - Тип трекера
 class TrackerTypeViewController: UIViewController {
     
     private var createHabit: UIButton = {

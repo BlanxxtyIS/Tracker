@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+//Статистика
 class StatisticsViewController: UIViewController {
 
     private lazy var centerEmoji: UIImageView = {

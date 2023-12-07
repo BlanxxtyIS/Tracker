@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+//Трекеры
 class TrackersViewController: UIViewController {
     
     let collectionView: UICollectionView = {
@@ -23,19 +23,29 @@ class TrackersViewController: UIViewController {
     //список категорий и трекеров в них
     var categories: [TrackerCategory] = []
     
-    private lazy var centerEmoji: UIImageView = {
+    private var centerEmoji: UIImageView = {
         var view = UIImageView()
         let image = UIImage(named: "1")
         view = UIImageView(image: image)
         return view
     }()
     
-    private lazy var centerLabel: UILabel = {
+    private var centerLabel: UILabel = {
         let label = UILabel()
         label.text = "Что будем отслеживать?"
         label.textColor = .udBlack
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         return label
+    }()
+    
+    private let dataPicker: UIDatePicker = {
+        let picker = UIDatePicker()
+        picker.datePickerMode = .date
+        picker.preferredDatePickerStyle = .compact
+        picker.locale = .current
+        picker.tintColor = .udBlack
+        picker.addTarget(self, action: #selector(datePickerValueChanged(_:)), for: .valueChanged)
+        return picker
     }()
     
     override func viewDidLoad() {
@@ -84,13 +94,13 @@ class TrackersViewController: UIViewController {
         self.navigationItem.leftBarButtonItem = plusButton
 
         //Дата
-        let datePicker = UIDatePicker()
-        datePicker.datePickerMode = .date
-        datePicker.preferredDatePickerStyle = .compact
-        datePicker.locale = .current
-        datePicker.tintColor = .udBlack
-        datePicker.addTarget(self, action: #selector(datePickerValueChanged(_:)), for: .valueChanged)
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: datePicker)
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: dataPicker)
+    }
+    
+    @objc
+    private func didTapPlusButton(_ sender: UIButton){
+        let storyboard = UINavigationController(rootViewController: TrackerTypeViewController())
+        present(storyboard, animated: true)
     }
     
     @objc
@@ -101,12 +111,6 @@ class TrackersViewController: UIViewController {
         let formattedDate = dateFormatter.string(from: selectedDate)
         Swift.print("Выбрали дату - \(formattedDate)")
     }
-    
-    @objc
-    private func didTapPlusButton(_ sender: UIButton){
-        let storyboard = UINavigationController(rootViewController: TrackerTypeViewController())
-        present(storyboard, animated: true)
-    }
 }
 
 //Обновление текста
@@ -115,5 +119,4 @@ extension TrackersViewController: UISearchResultsUpdating {
         guard let text = searchController.searchBar.text else { return }
         print(text)
     }
-    
 }
