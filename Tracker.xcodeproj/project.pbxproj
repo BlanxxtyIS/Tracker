@@ -11,6 +11,7 @@
 		F40DD3F02B20557C00E2948C /* ColorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F40DD3EF2B20557C00E2948C /* ColorCell.swift */; };
 		F40DD3F22B2064C700E2948C /* EmojiCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F40DD3F12B2064C700E2948C /* EmojiCell.swift */; };
 		F436917B2B1EFCE6001F363D /* TrackerTypeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F436917A2B1EFCE6001F363D /* TrackerTypeViewController.swift */; };
+		F44505882B246D5800B10D86 /* TrackersHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44505872B246D5800B10D86 /* TrackersHeader.swift */; };
 		F44D61272B14B8E200F56208 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44D61262B14B8E200F56208 /* AppDelegate.swift */; };
 		F44D61292B14B8E200F56208 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44D61282B14B8E200F56208 /* SceneDelegate.swift */; };
 		F44D612B2B14B8E200F56208 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44D612A2B14B8E200F56208 /* TabBarViewController.swift */; };
@@ -25,7 +26,7 @@
 		F4B7272C2B1DD5DF005A8EC4 /* TrackerCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B7272B2B1DD5DF005A8EC4 /* TrackerCategory.swift */; };
 		F4B7272E2B1DD5EB005A8EC4 /* TrackerRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B7272D2B1DD5EB005A8EC4 /* TrackerRecord.swift */; };
 		F4C16F8C2B226E370023DAD7 /* EmojiHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C16F8B2B226E370023DAD7 /* EmojiHeader.swift */; };
-		F4DE1FAB2B1E2A9500AB0616 /* TracekrsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4DE1FAA2B1E2A9500AB0616 /* TracekrsCell.swift */; };
+		F4DE1FAB2B1E2A9500AB0616 /* TrackersCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4DE1FAA2B1E2A9500AB0616 /* TrackersCell.swift */; };
 		F4FE66782B15C20A009212E2 /* UIColor + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4FE66772B15C20A009212E2 /* UIColor + Extension.swift */; };
 		F4FE667B2B15C59A009212E2 /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4FE667A2B15C59A009212E2 /* StatisticsViewController.swift */; };
 		F4FE667D2B15C5A6009212E2 /* TrackersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4FE667C2B15C5A6009212E2 /* TrackersViewController.swift */; };
@@ -36,6 +37,7 @@
 		F40DD3EF2B20557C00E2948C /* ColorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorCell.swift; sourceTree = "<group>"; };
 		F40DD3F12B2064C700E2948C /* EmojiCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCell.swift; sourceTree = "<group>"; };
 		F436917A2B1EFCE6001F363D /* TrackerTypeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerTypeViewController.swift; sourceTree = "<group>"; };
+		F44505872B246D5800B10D86 /* TrackersHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersHeader.swift; sourceTree = "<group>"; };
 		F44D61232B14B8E200F56208 /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F44D61262B14B8E200F56208 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F44D61282B14B8E200F56208 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -52,7 +54,7 @@
 		F4B7272B2B1DD5DF005A8EC4 /* TrackerCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategory.swift; sourceTree = "<group>"; };
 		F4B7272D2B1DD5EB005A8EC4 /* TrackerRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecord.swift; sourceTree = "<group>"; };
 		F4C16F8B2B226E370023DAD7 /* EmojiHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiHeader.swift; sourceTree = "<group>"; };
-		F4DE1FAA2B1E2A9500AB0616 /* TracekrsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracekrsCell.swift; sourceTree = "<group>"; };
+		F4DE1FAA2B1E2A9500AB0616 /* TrackersCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersCell.swift; sourceTree = "<group>"; };
 		F4FE66772B15C20A009212E2 /* UIColor + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor + Extension.swift"; sourceTree = "<group>"; };
 		F4FE667A2B15C59A009212E2 /* StatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
 		F4FE667C2B15C5A6009212E2 /* TrackersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersViewController.swift; sourceTree = "<group>"; };
@@ -116,7 +118,8 @@
 				F4B727282B1DD5C8005A8EC4 /* Tracker.swift */,
 				F4B7272B2B1DD5DF005A8EC4 /* TrackerCategory.swift */,
 				F4B7272D2B1DD5EB005A8EC4 /* TrackerRecord.swift */,
-				F4DE1FAA2B1E2A9500AB0616 /* TracekrsCell.swift */,
+				F4DE1FAA2B1E2A9500AB0616 /* TrackersCell.swift */,
+				F44505872B246D5800B10D86 /* TrackersHeader.swift */,
 				F457E9FE2B21E53F003384BE /* TableViewCell.swift */,
 				F457EA022B221B9B003384BE /* ScheduleTableViewCell.swift */,
 			);
@@ -219,11 +222,12 @@
 			files = (
 				F457E9FF2B21E53F003384BE /* TableViewCell.swift in Sources */,
 				F4C16F8C2B226E370023DAD7 /* EmojiHeader.swift in Sources */,
-				F4DE1FAB2B1E2A9500AB0616 /* TracekrsCell.swift in Sources */,
+				F4DE1FAB2B1E2A9500AB0616 /* TrackersCell.swift in Sources */,
 				F457EA032B221B9B003384BE /* ScheduleTableViewCell.swift in Sources */,
 				F457E9F42B21A9F4003384BE /* ColorHeader.swift in Sources */,
 				F436917B2B1EFCE6001F363D /* TrackerTypeViewController.swift in Sources */,
 				F44D612B2B14B8E200F56208 /* TabBarViewController.swift in Sources */,
+				F44505882B246D5800B10D86 /* TrackersHeader.swift in Sources */,
 				F40DD3EE2B2046D600E2948C /* NewHabit.swift in Sources */,
 				F4FE667B2B15C59A009212E2 /* StatisticsViewController.swift in Sources */,
 				F4B7272C2B1DD5DF005A8EC4 /* TrackerCategory.swift in Sources */,

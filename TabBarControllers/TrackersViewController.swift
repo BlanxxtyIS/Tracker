@@ -9,16 +9,20 @@ import UIKit
 //Трекеры
 class TrackersViewController: UIViewController {
     
-    let collectionView: UICollectionView = {
+    private let collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        collectionView.register(TrackersHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
         collectionView.register(TrackersCell.self, forCellWithReuseIdentifier: "cell")
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
     
     //треккеры которые были выполнены в выбранную дату
     var completedTrackers: [TrackerRecord] = []
     
-    var visibleTracker: [String] = []
+    var visibleTracker1: [UIView] = [UIView()]
+    
+    private var allCategories: [TrackerCategory] = [TrackerCategory(header: "Домашний уют", tracker: [Tracker(id: 1, name: "Сдать ревью", color: .c11, emoji: "🌺", timesheet: ["11": "45"])])]
     
     //список категорий и трекеров в них
     var categories: [TrackerCategory] = []
@@ -73,11 +77,20 @@ class TrackersViewController: UIViewController {
         
         centerLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(centerLabel)
+    
+        view.addSubview(collectionView)
+        collectionView.dataSource = self
+        collectionView.delegate = self
     }
     
     private func setupAllContraints() {
         let safeArea = view.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
+            
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             
             centerEmoji.centerXAnchor.constraint(equalTo: safeArea.centerXAnchor),
             centerEmoji.centerYAnchor.constraint(equalTo: safeArea.centerYAnchor),
@@ -118,5 +131,34 @@ extension TrackersViewController: UISearchResultsUpdating {
     internal func updateSearchResults(for searchController: UISearchController) {
         guard let text = searchController.searchBar.text else { return }
         print(text)
+    }
+}
+
+extension TrackersViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        var id = "header"
+        let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: id, for: indexPath) as! TrackersHeader
+        view.titleLabel.text = "Домашний уют"
+        return view
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        let indexPath = IndexPath(row: 0, section: section)
+        let headerView = self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader, at: indexPath)
+        return headerView.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width, height: UIView.layoutFittingExpandedSize.height), withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
+    }
+}
+
+extension TrackersViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        print(allCategories.count)
+        return allCategories.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! TrackersCell
+        let tracker: Tracker = allCategories[indexPath.section].tracker[indexPath.row]
+        cell.setupTrackersCell(text: tracker.name, emoji: tracker.emoji, color: tracker.color, buttonTintColor: tracker.color, trackerID: UInt(), counter: 1, completionFlag: false)
+        return cell
     }
 }
