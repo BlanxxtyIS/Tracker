@@ -86,6 +86,7 @@
 			isa = PBXGroup;
 			children = (
 				F44D61252B14B8E200F56208 /* Tracker */,
+				F4527A372B2990D800BD3740 /* Models */,
 				F4FE66792B15C56B009212E2 /* TabBarControllers */,
 				F4FE66762B15C1F8009212E2 /* Helpers */,
 				F44D61242B14B8E200F56208 /* Products */,
@@ -110,6 +111,13 @@
 				F44D61342B14B8E400F56208 /* Info.plist */,
 			);
 			path = Tracker;
+			sourceTree = "<group>";
+		};
+		F4527A372B2990D800BD3740 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		F4B7272A2B1DD5D0005A8EC4 /* Models */ = {

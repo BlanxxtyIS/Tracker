@@ -37,7 +37,7 @@ final class TrackersCell: UICollectionViewCell {
     }()
     
     var emojiImage: UIImageView = {
-        let emoji = UIImage(named: "ic 24x24")
+        let emoji = UIImage(named: "🌺")
         let image = UIImageView(image: emoji)
         image.contentMode = .scaleAspectFill
         image.translatesAutoresizingMaskIntoConstraints = false
@@ -134,18 +134,20 @@ final class TrackersCell: UICollectionViewCell {
     
     @objc
     func plusButtonClicked() {
-        print("plus plus plus")
+        completionCount += 1
+        dayLabel.text = "\(completionCount) дней"
+        print("\(completionCount) дней")
     }
     
     func setupTrackersCell(text: String,
-                           emoji: String,
+                           emoji: UIImage,
                            color: UIColor,
                            buttonTintColor: UIColor,
                            trackerID: UInt,
                            counter: Int,
                            completionFlag: Bool) {
         textLabel.text = text
-        emojiImage.image = UIImage(named: emoji)
+        emojiImage.image = emoji
         colorView.backgroundColor = color
         plusDayButton.tintColor = buttonTintColor
         completionCount = counter

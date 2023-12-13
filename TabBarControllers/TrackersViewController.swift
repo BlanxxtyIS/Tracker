@@ -20,9 +20,11 @@ class TrackersViewController: UIViewController {
     //треккеры которые были выполнены в выбранную дату
     var completedTrackers: [TrackerRecord] = []
     
-    var visibleTracker1: [UIView] = [UIView()]
+    var visibleTracker: [TrackerCategory] = []
     
-    private var allCategories: [TrackerCategory] = [TrackerCategory(header: "Домашний уют", tracker: [Tracker(id: 1, name: "Сдать ревью", color: .c11, emoji: "🌺", timesheet: ["11": "45"])])]
+    private var allCategories: [TrackerCategory] = [TrackerCategory(header: "Сдать бы ревью", tracker: [Tracker(id: 1, name: "Цветы", color: .c11, emoji: UIImage(named: "🌺") ?? UIImage(), timesheet: ["11": "45"])]),
+                                                    TrackerCategory(header: "Сдать бы ревью2", tracker: [Tracker(id: 2, name: "Cмайлик", color: .c1, emoji: UIImage(named: "😂️️️️️️") ?? UIImage(), timesheet: ["11": "45"])])]
+     
     
     //список категорий и трекеров в них
     var categories: [TrackerCategory] = []
@@ -135,10 +137,32 @@ extension TrackersViewController: UISearchResultsUpdating {
 }
 
 extension TrackersViewController: UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 167, height: 148)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 9
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        UIEdgeInsets(top: 10, left: 0, bottom: 16, right: 0)
+    }
+    
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        var id = "header"
+        
+        var id: String
+        switch kind {
+        case UICollectionView.elementKindSectionHeader:
+            id = "header"
+        default:
+            id = ""
+        }
         let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: id, for: indexPath) as! TrackersHeader
-        view.titleLabel.text = "Домашний уют"
+        if categories.isEmpty{ return view }
+        
+        view.titleLabel.text = allCategories[indexPath.section].header
         return view
     }
     
@@ -150,15 +174,18 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
 }
 
 extension TrackersViewController: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        print(allCategories.count)
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         return allCategories.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return allCategories[section].tracker.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! TrackersCell
         let tracker: Tracker = allCategories[indexPath.section].tracker[indexPath.row]
-        cell.setupTrackersCell(text: tracker.name, emoji: tracker.emoji, color: tracker.color, buttonTintColor: tracker.color, trackerID: UInt(), counter: 1, completionFlag: false)
+        cell.setupTrackersCell(text: tracker.name, emoji: tracker.emoji, color: tracker.color, buttonTintColor: tracker.color, trackerID: tracker.id, counter: 1, completionFlag: false)
         return cell
     }
 }
