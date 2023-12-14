@@ -70,7 +70,7 @@ class TrackerTypeViewController: UIViewController {
     @objc
     func createHabitButton() {
         print("Привычка")
-        let storyboard = UINavigationController(rootViewController: NewHabit())
+        let storyboard = UINavigationController(rootViewController: NewHabitViewController())
         present(storyboard, animated: true)
     }
     

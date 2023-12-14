@@ -7,7 +7,7 @@
 
 import UIKit
 //Привычка
-class NewHabit: UIViewController {
+class NewHabitViewController: UIViewController {
     
     private var habit: [String] = ["Категория", "Расписание"]
     
@@ -40,15 +40,7 @@ class NewHabit: UIViewController {
         return collectionView
     }()
     var colorCollection: [UIColor] = [.c1, .c2, .c3, .c4, .c5, .c6, .c7, .c8, .c9, .c10, .c11, .c12, .c13, .c14, .c15, .c16, .c17, .c18]
-    
-//    private var emojiCollectionView: UICollectionView = {
-//        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-//        collectionView.register(ColorCell.self, forCellWithReuseIdentifier: "cell")
-//        collectionView.translatesAutoresizingMaskIntoConstraints = false
-//        return collectionView
-//    }()
-//    var emojiCollection: [String] = [ "🍇", "🍈", "🍉", "🍊", "🍋", "🍌", "🍍", "🥭", "🍎", "🍏", "🍐", "🍒", "🍓", "🫐", "🥝", "🍅", "🫒", "🥥"]
-    
+        
     private let cancelButton: UIButton = {
         let cancel = UIButton()
         cancel.setTitle("Отменить", for: .normal)
@@ -90,9 +82,6 @@ class NewHabit: UIViewController {
         setupAllConstraints()
         colorCollectionView.register(ColorCell.self, forCellWithReuseIdentifier: "ColorCell")
         colorCollectionView.register(ColorHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
-        
-//        emojiCollectionView.register(EmojiCell.self, forCellWithReuseIdentifier: "EmodjiCell")
-//        emojiCollectionView.register(ColorHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
     }
     
     private func setupAllConstraints() {
@@ -106,11 +95,6 @@ class NewHabit: UIViewController {
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             tableView.heightAnchor.constraint(equalToConstant: 150),
-
-//            emojiCollectionView.topAnchor.constraint(equalTo: tableView.bottomAnchor,constant: 32),
-//            emojiCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
-//            emojiCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
-//            emojiCollectionView.bottomAnchor.constraint(equalTo: colorCollectionView.topAnchor, constant: -16),
             
             colorCollectionView.bottomAnchor.constraint(equalTo: createButtonStackView.topAnchor, constant: -16),
             colorCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
@@ -132,10 +116,6 @@ class NewHabit: UIViewController {
         view.addSubview(tableView)
         tableView.dataSource = self
         tableView.delegate = self
-        
-//        view.addSubview(emojiCollectionView)
-//        emojiCollectionView.delegate = self
-//        emojiCollectionView.dataSource = self
         
         view.addSubview(colorCollectionView)
         colorCollectionView.delegate = self
@@ -159,7 +139,7 @@ class NewHabit: UIViewController {
     }
 }
 
-extension NewHabit: UITableViewDelegate {
+extension NewHabitViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 0{
             print("Категория")
@@ -173,11 +153,11 @@ extension NewHabit: UITableViewDelegate {
     }
 }
 
-extension NewHabit: UITableViewDataSource {
+extension NewHabitViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return habit.count
     }
-    
+        
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCell", for: indexPath) as! TableViewCell
         cell.textLabel?.text = self.habit[indexPath.row]
@@ -188,7 +168,7 @@ extension NewHabit: UITableViewDataSource {
     }
 }
 
-extension NewHabit: UICollectionViewDataSource {
+extension NewHabitViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return colorCollection.count
     }
@@ -205,9 +185,11 @@ extension NewHabit: UICollectionViewDataSource {
         return cell
     }
 }
+    
+    
 
 //Размер ячейки коллекции
-extension NewHabit: UICollectionViewDelegateFlowLayout {
+extension NewHabitViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 52, height: 52)
     }

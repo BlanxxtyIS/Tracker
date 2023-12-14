@@ -11,7 +11,7 @@ final class ColorCell: UICollectionViewCell {
     
     let identifier = "ColorCell"
     
-    let viewColor: UIView = {
+    lazy var viewColor: UIView = {
         let view = UIView()
         view.layer.masksToBounds = true
         view.layer.cornerRadius = 8

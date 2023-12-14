@@ -24,7 +24,6 @@ class TrackersViewController: UIViewController {
     
     private var allCategories: [TrackerCategory] = [TrackerCategory(header: "Сдать бы ревью", tracker: [Tracker(id: 1, name: "Цветы", color: .c11, emoji: UIImage(named: "🌺") ?? UIImage(), timesheet: ["11": "45"])]),
                                                     TrackerCategory(header: "Сдать бы ревью2", tracker: [Tracker(id: 2, name: "Cмайлик", color: .c1, emoji: UIImage(named: "😂️️️️️️") ?? UIImage(), timesheet: ["11": "45"])])]
-     
     
     //список категорий и трекеров в них
     var categories: [TrackerCategory] = []
@@ -150,6 +149,12 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
         UIEdgeInsets(top: 10, left: 0, bottom: 16, right: 0)
     }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        let indexPath = IndexPath(row: 0, section: section)
+        let headerView = self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader, at: indexPath)
+        return headerView.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width, height: UIView.layoutFittingExpandedSize.height), withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
+    }
+    
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
         var id: String
@@ -164,12 +169,6 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
         
         view.titleLabel.text = allCategories[indexPath.section].header
         return view
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        let indexPath = IndexPath(row: 0, section: section)
-        let headerView = self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader, at: indexPath)
-        return headerView.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width, height: UIView.layoutFittingExpandedSize.height), withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
     }
 }
 

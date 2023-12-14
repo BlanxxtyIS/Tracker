@@ -11,7 +11,7 @@ class EmojiCell: UICollectionViewCell {
     
     let identifier = "EmojiCell"
     
-    var emojiCell: UIImageView = {
+    private lazy var emojiImageView: UIImageView = {
         var emoji = UIImageView()
         let emojiCell = UIImage(named: "")
         emoji = UIImageView(image: emojiCell)
@@ -21,14 +21,14 @@ class EmojiCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        contentView.addSubview(emojiCell)
-        emojiCell.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(emojiImageView)
+        emojiImageView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            emojiCell.heightAnchor.constraint(equalToConstant: 38),
-            emojiCell.widthAnchor.constraint(equalToConstant: 32),
-            emojiCell.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            emojiCell.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)])
+            emojiImageView.heightAnchor.constraint(equalToConstant: 38),
+            emojiImageView.widthAnchor.constraint(equalToConstant: 32),
+            emojiImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            emojiImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)])
     }
     
     required init?(coder: NSCoder) {
