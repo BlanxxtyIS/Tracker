@@ -9,9 +9,9 @@ import UIKit
 
 //Для хранения информации про трекер
 struct Tracker {
-    let id: UInt
-    let name: String
+    let id: UUID
     let color: UIColor
-    let emoji: UIImage
-    let timesheet: [String: String]
+    let emoji: String
+    let text: String
+    let schedule: Date
 }

@@ -10,7 +10,5 @@ import Foundation
 
 struct TrackerRecord {
     let id: UUID
-    let date: [Date]
-    let days: Int
-    let tracker: Tracker
+    let date: Date
 }

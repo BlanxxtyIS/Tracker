@@ -24,7 +24,7 @@ class TrackersHeader: UICollectionReusableView {
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 28),
             titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 24),
-            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -12)])
+            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 12)])
     }
     
     required init?(coder: NSCoder) {

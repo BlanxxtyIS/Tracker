@@ -7,7 +7,17 @@
 
 import UIKit
 
+protocol TrackersCellDelegate: AnyObject {
+    func competeTracker(id: UUID, at indexPath: IndexPath)
+    func uncompleteTracker(id: UUID, at indexPath: IndexPath)
+}
+
 final class TrackersCell: UICollectionViewCell {
+    
+    var isCompleted: Bool = false
+    weak var delegate: TrackersCellDelegate?
+    var trackerId: UUID?
+    var indexPath: IndexPath?
     
     var completionCount: Int = 0
     
@@ -27,21 +37,17 @@ final class TrackersCell: UICollectionViewCell {
         return color
     }()
     
-    let emojiView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .udBackground
-        view.layer.masksToBounds = true
-        view.layer.cornerRadius = 12
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
-    var emojiImage: UIImageView = {
-        let emoji = UIImage(named: "🌺")
-        let image = UIImageView(image: emoji)
-        image.contentMode = .scaleAspectFill
-        image.translatesAutoresizingMaskIntoConstraints = false
-        return image
+    var emojiImage: UILabel = {
+        let emoji = UILabel()
+        emoji.numberOfLines = 1
+        emoji.textAlignment = .center
+        emoji.textColor = .udWhite
+        emoji.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+        emoji.backgroundColor = .udBackground
+        emoji.layer.masksToBounds = true
+        emoji.layer.cornerRadius = 12
+        emoji.translatesAutoresizingMaskIntoConstraints = false
+        return emoji
     }()
     
     var textLabel: UILabel = {
@@ -66,30 +72,47 @@ final class TrackersCell: UICollectionViewCell {
     }()
     
     var plusDayButton: UIButton = {
-        let image = UIImage(named: "Plus")
-        let plus = UIButton.systemButton(with: image!, target: self, action: #selector(plusButtonClicked))
-        plus.tintColor = .c5
-        plus.translatesAutoresizingMaskIntoConstraints = false
-        plus.layer.masksToBounds = true
-        return plus
+        let button = UIButton(type: .system)
+        let pointSize = UIImage.SymbolConfiguration(pointSize: 11)
+        let image = UIImage(systemName: "plus", withConfiguration: pointSize)
+        button.tintColor = .udWhite
+        button.setImage(image, for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.layer.cornerRadius = 34 / 2
+        button.addTarget(self, action: #selector(plusButtonClick), for: .touchUpInside)
+        return button
+    }()
+    
+    private lazy var readyImage: UIImage = {
+        let image = UIImage(named: "done_icon") ?? UIImage()
+        return image
+    }()
+    
+    private lazy var plusImage: UIImage = {
+        let size = UIImage.SymbolConfiguration(pointSize: 11)
+        let image = UIImage(named: "Plus") ?? UIImage()
+        return image
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
+        setupAllViewContraints()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setupAllViewContraints() {
         contentView.addSubview(cardView)
         cardView.addSubview(colorView)
         
-        colorView.addSubview(emojiView)
-        emojiView.addSubview(emojiImage)
+        colorView.addSubview(emojiImage)
         
         colorView.addSubview(textLabel)
         
         cardView.addSubview(dayLabel)
         cardView.addSubview(plusDayButton)
-        
-        //        contentView.addSubview(tracker)
-        //        tracker.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             cardView.heightAnchor.constraint(equalToConstant: 148),
@@ -97,18 +120,18 @@ final class TrackersCell: UICollectionViewCell {
             cardView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             cardView.topAnchor.constraint(equalTo: topAnchor, constant: 12),
             
-            emojiView.heightAnchor.constraint(equalToConstant: 24),
-            emojiView.widthAnchor.constraint(equalToConstant: 24),
-            emojiView.leadingAnchor.constraint(equalTo: colorView.leadingAnchor, constant: 12),
-            emojiView.topAnchor.constraint(equalTo: colorView.topAnchor, constant: 12),
+            colorView.topAnchor.constraint(equalTo: cardView.topAnchor),
+            colorView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor),
+            colorView.trailingAnchor.constraint(equalTo: cardView.trailingAnchor),
+            colorView.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -58),
             
-            emojiImage.heightAnchor.constraint(equalToConstant: 22),
-            emojiImage.widthAnchor.constraint(equalToConstant: 16),
-            emojiImage.centerYAnchor.constraint(equalTo: emojiView.centerYAnchor),
-            emojiImage.centerXAnchor.constraint(equalTo: emojiView.centerXAnchor),
+            emojiImage.heightAnchor.constraint(equalToConstant: 24),
+            emojiImage.widthAnchor.constraint(equalToConstant: 24),
+            emojiImage.topAnchor.constraint(equalTo: colorView.topAnchor, constant: 12),
+            emojiImage.leadingAnchor.constraint(equalTo: colorView.leadingAnchor, constant: 12),
             
             textLabel.leadingAnchor.constraint(equalTo: colorView.leadingAnchor, constant: 12),
-            textLabel.topAnchor.constraint(equalTo: emojiView.bottomAnchor, constant: 8),
+            textLabel.topAnchor.constraint(equalTo: emojiImage.bottomAnchor, constant: 8),
             textLabel.trailingAnchor.constraint(equalTo: colorView.trailingAnchor, constant: -12),
             textLabel.bottomAnchor.constraint(equalTo: colorView.bottomAnchor, constant: -12),
             
@@ -121,37 +144,76 @@ final class TrackersCell: UICollectionViewCell {
             plusDayButton.heightAnchor.constraint(equalToConstant: 34),
             plusDayButton.leadingAnchor.constraint(equalTo: dayLabel.trailingAnchor, constant: 8),
             plusDayButton.topAnchor.constraint(equalTo: colorView.bottomAnchor, constant: 8),
-            plusDayButton.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -12),
-            
-            colorView.topAnchor.constraint(equalTo: cardView.topAnchor),
-            colorView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor),
-            colorView.trailingAnchor.constraint(equalTo: cardView.trailingAnchor),
-            colorView.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -58)])
+            plusDayButton.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -12)])
     }
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    
+    private func completionCountDaysText(completedDays: Int) -> String {
+        let lasyNumber = completedDays % 10
+        let lastTwoNumbers = completedDays % 100
+        if lastTwoNumbers >= 11 && lastTwoNumbers <= 19 {
+            return "\(completedDays) дней"
+        }
+        
+        switch lasyNumber {
+        case 1:
+            return "\(completedDays) день"
+        case 2, 3, 4:
+            return "\(completedDays) дня"
+        default:
+            return "\(completedDays) дней"
+        }
     }
     
     @objc
-    func plusButtonClicked() {
-        completionCount += 1
-        dayLabel.text = "\(completionCount) дней"
-        print("\(completionCount) дней")
+    func plusButtonClick() {
+        guard let trackerId = trackerId, let indexPath = indexPath else {
+            assertionFailure("Нету ID трекера")
+            return
+        }
+        if isCompleted {
+            delegate?.uncompleteTracker(id: trackerId, at: indexPath)
+            isCompleted = false
+        } else {
+            delegate?.competeTracker(id: trackerId, at: indexPath)
+            isCompleted = true
+        }
     }
     
-    func setupTrackersCell(text: String,
-                           emoji: UIImage,
-                           color: UIColor,
-                           buttonTintColor: UIColor,
-                           trackerID: UInt,
-                           counter: Int,
-                           completionFlag: Bool) {
-        textLabel.text = text
-        emojiImage.image = emoji
-        colorView.backgroundColor = color
-        plusDayButton.tintColor = buttonTintColor
-        completionCount = counter
-        //         trackerId = trackerID
-        //         isCompletedToday = completionFlag)
+    func configure(
+        with tracker: Tracker,
+        isCompletedToday: Bool,
+        completedDays: Int,
+        indexPath: IndexPath
+    ) {
+        self.trackerId = tracker.id
+        self.isCompleted = isCompletedToday
+        self.indexPath = indexPath
+        
+        colorView.backgroundColor = tracker.color
+
+        textLabel.text = tracker.text
+        emojiImage.text = tracker.emoji
+        
+        let days = completionCountDaysText(completedDays: completedDays)
+        dayLabel.text = days
+        
+        if isCompletedToday {
+            plusDayButton.setImage(readyImage, for: .normal)
+            plusDayButton.backgroundColor = tracker.color
+        } else {
+            plusDayButton.setImage(plusImage, for: .normal)
+            plusDayButton.tintColor = tracker.color
+        }
+        
+        adjustOpacity(to: isCompletedToday)
+        
     }
+    private func adjustOpacity(to isCompleted: Bool) {
+        if isCompleted {
+            plusDayButton.layer.opacity = 0.2
+        } else {
+            plusDayButton.layer.opacity = 1
+        }
+    }
+    
 }
