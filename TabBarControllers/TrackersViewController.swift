@@ -76,8 +76,7 @@ class TrackersViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .udWhite
-        //visibleCategories = categories
-        selectedView()
+        visibleCategories = categories
         navBarItem()
         setupCollectionView()
         setupEmptyConstraints()
@@ -125,14 +124,6 @@ class TrackersViewController: UIViewController {
             errorText.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             errorText.topAnchor.constraint(equalTo: emptyImage.bottomAnchor, constant: 8),
             ])
-    }
-    
-    func selectedView() {
-        if visibleCategories.isEmpty {
-            setupEmptyConstraints()
-        } else {
-            setupCollectionView()
-        }
     }
     
     func setupCollectionView() {
