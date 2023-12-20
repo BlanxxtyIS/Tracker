@@ -6,15 +6,12 @@
 //
 
 import UIKit
-enum WeekDay: String, CaseIterable {
-    case Понедельник, Вторник, Среда, Четверг, Пятница, Суббота, Воскресенье
-}
 
 class ScheduleViewController: UIViewController {
     
-    let weekDay: [String] = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
+    private let weekDay: [String] = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
     
-    let scheduleTableView: UITableView = {
+    lazy var scheduleTableView: UITableView = {
         let table = UITableView(frame: .zero)
         table.register(TableViewCell.self, forCellReuseIdentifier: "ScheduleTableViewCell")
         table.separatorStyle = .none
@@ -28,7 +25,7 @@ class ScheduleViewController: UIViewController {
         return table
     }()
     
-    let readyButton: UIButton = {
+    lazy var readyButton: UIButton = {
         let button = UIButton()
         button.setTitle("Готово", for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)

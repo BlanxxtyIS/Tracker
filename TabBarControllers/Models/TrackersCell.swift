@@ -8,16 +8,17 @@
 import UIKit
 
 protocol TrackersCellDelegate: AnyObject {
-    func competeTracker(id: UUID, at indexPath: IndexPath)
-    func uncompleteTracker(id: UUID, at indexPath: IndexPath)
+    func competeTracker(id: UUID)
+    func uncompleteTracker(id: UUID)
 }
 
 final class TrackersCell: UICollectionViewCell {
-    
-    var isCompleted: Bool = false
-    weak var delegate: TrackersCellDelegate?
+
+    var isCompleted: Bool?
     var trackerId: UUID?
     var indexPath: IndexPath?
+    
+    weak var delegate: TrackersCellDelegate?
     
     var completionCount: Int = 0
     
@@ -117,8 +118,9 @@ final class TrackersCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             cardView.heightAnchor.constraint(equalToConstant: 148),
             cardView.widthAnchor.constraint(equalToConstant: 167),
-            cardView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            cardView.topAnchor.constraint(equalTo: topAnchor, constant: 12),
+            cardView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            cardView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            cardView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             
             colorView.topAnchor.constraint(equalTo: cardView.topAnchor),
             colorView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor),
@@ -147,35 +149,35 @@ final class TrackersCell: UICollectionViewCell {
             plusDayButton.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -12)])
     }
     
-    private func completionCountDaysText(completedDays: Int) -> String {
-        let lasyNumber = completedDays % 10
-        let lastTwoNumbers = completedDays % 100
-        if lastTwoNumbers >= 11 && lastTwoNumbers <= 19 {
-            return "\(completedDays) дней"
-        }
+    private func completionCountDaysText(completedDays: Int){
+        let remainder = completedDays % 100
         
-        switch lasyNumber {
-        case 1:
-            return "\(completedDays) день"
-        case 2, 3, 4:
-            return "\(completedDays) дня"
-        default:
-            return "\(completedDays) дней"
+        if (11...14).contains(remainder) {
+            dayLabel.text = "\(completedDays) дней"
+        } else {
+            switch remainder % 10 {
+            case 1:
+                dayLabel.text = "\(completedDays) день"
+            case 2...4:
+                dayLabel.text = "\(completedDays) дня"
+            default:
+                dayLabel.text = "\(completedDays) дней"
+            }
         }
     }
     
     @objc
     func plusButtonClick() {
-        guard let trackerId = trackerId, let indexPath = indexPath else {
-            assertionFailure("Нету ID трекера")
+        guard let isCompleted = isCompleted,
+              let trackerID = trackerId
+        else {
             return
         }
         if isCompleted {
-            delegate?.uncompleteTracker(id: trackerId, at: indexPath)
-            isCompleted = false
+            delegate?.uncompleteTracker(id: trackerID)
         } else {
-            delegate?.competeTracker(id: trackerId, at: indexPath)
-            isCompleted = true
+            delegate?.competeTracker(id: trackerID)
+
         }
     }
     
@@ -190,30 +192,25 @@ final class TrackersCell: UICollectionViewCell {
         self.indexPath = indexPath
         
         colorView.backgroundColor = tracker.color
-
+        
         textLabel.text = tracker.text
         emojiImage.text = tracker.emoji
+        completionCountDaysText(completedDays: completedDays)
         
-        let days = completionCountDaysText(completedDays: completedDays)
-        dayLabel.text = days
+        let image = isCompleted! ? UIImage(systemName: "checkmark") : UIImage(systemName: "plus")
+        let imageview = UIImageView(image: image)
         
-        if isCompletedToday {
-            plusDayButton.setImage(readyImage, for: .normal)
-            plusDayButton.backgroundColor = tracker.color
-        } else {
-            plusDayButton.setImage(plusImage, for: .normal)
-            plusDayButton.tintColor = tracker.color
+        plusDayButton.backgroundColor = isCompletedToday ? tracker.color.withAlphaComponent(0.3) : tracker.color
+        colorView.backgroundColor = tracker.color
+        for view in self.plusDayButton.subviews {
+            view.removeFromSuperview()
         }
+        plusDayButton.addSubview(imageview)
         
-        adjustOpacity(to: isCompletedToday)
+        imageview.translatesAutoresizingMaskIntoConstraints = false
+        imageview.centerXAnchor.constraint(equalTo: plusDayButton.centerXAnchor).isActive = true
+        imageview.centerYAnchor.constraint(equalTo: plusDayButton.centerYAnchor).isActive = true
         
-    }
-    private func adjustOpacity(to isCompleted: Bool) {
-        if isCompleted {
-            plusDayButton.layer.opacity = 0.2
-        } else {
-            plusDayButton.layer.opacity = 1
-        }
     }
     
 }

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F4024F4B2B306FB700DEF0D7 /* CollectionParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4024F4A2B306FB700DEF0D7 /* CollectionParameters.swift */; };
+		F4024F4D2B30D40500DEF0D7 /* WeekDays.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4024F4C2B30D40500DEF0D7 /* WeekDays.swift */; };
 		F40DD3EE2B2046D600E2948C /* NewHabitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F40DD3ED2B2046D600E2948C /* NewHabitViewController.swift */; };
 		F40DD3F02B20557C00E2948C /* ColorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F40DD3EF2B20557C00E2948C /* ColorCell.swift */; };
 		F40DD3F22B2064C700E2948C /* EmojiCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F40DD3F12B2064C700E2948C /* EmojiCell.swift */; };
@@ -33,6 +35,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F4024F4A2B306FB700DEF0D7 /* CollectionParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionParameters.swift; sourceTree = "<group>"; };
+		F4024F4C2B30D40500DEF0D7 /* WeekDays.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekDays.swift; sourceTree = "<group>"; };
 		F40DD3ED2B2046D600E2948C /* NewHabitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHabitViewController.swift; sourceTree = "<group>"; };
 		F40DD3EF2B20557C00E2948C /* ColorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorCell.swift; sourceTree = "<group>"; };
 		F40DD3F12B2064C700E2948C /* EmojiCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCell.swift; sourceTree = "<group>"; };
@@ -130,6 +134,7 @@
 				F44505872B246D5800B10D86 /* TrackersHeader.swift */,
 				F457E9FE2B21E53F003384BE /* TableViewCell.swift */,
 				F457EA022B221B9B003384BE /* ScheduleTableViewCell.swift */,
+				F4024F4A2B306FB700DEF0D7 /* CollectionParameters.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -138,6 +143,7 @@
 			isa = PBXGroup;
 			children = (
 				F4FE66772B15C20A009212E2 /* UIColor + Extension.swift */,
+				F4024F4C2B30D40500DEF0D7 /* WeekDays.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -236,9 +242,11 @@
 				F436917B2B1EFCE6001F363D /* TrackerTypeViewController.swift in Sources */,
 				F44D612B2B14B8E200F56208 /* TabBarViewController.swift in Sources */,
 				F44505882B246D5800B10D86 /* TrackersHeader.swift in Sources */,
+				F4024F4B2B306FB700DEF0D7 /* CollectionParameters.swift in Sources */,
 				F40DD3EE2B2046D600E2948C /* NewHabitViewController.swift in Sources */,
 				F4FE667B2B15C59A009212E2 /* StatisticsViewController.swift in Sources */,
 				F4B7272C2B1DD5DF005A8EC4 /* TrackerCategory.swift in Sources */,
+				F4024F4D2B30D40500DEF0D7 /* WeekDays.swift in Sources */,
 				F4FE66782B15C20A009212E2 /* UIColor + Extension.swift in Sources */,
 				F4B727292B1DD5C8005A8EC4 /* Tracker.swift in Sources */,
 				F457E9FD2B21DE80003384BE /* NewIrregularAction.swift in Sources */,

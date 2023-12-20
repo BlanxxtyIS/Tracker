@@ -6,12 +6,23 @@
 //
 
 import UIKit
+protocol NewHabitDelegate: AnyObject {
+    func createdNewHabbit(tracker: Tracker)
+    func cancelCreatedNewHabbit()
+}
+
 //Привычка
 class NewHabitViewController: UIViewController {
     
+    let trakersViewController = TrackersViewController()
+    
+    private var configuredSchedule: Set<WeekDays> = []
+    
+    weak var delegate: NewHabitDelegate?
+    
     private var habit: [String] = ["Категория", "Расписание"]
     
-    private let trackerName: UITextField = {
+    private lazy var trackerName: UITextField = {
         let name = UITextField()
         name.placeholder = "  Введите название трекера"
         name.translatesAutoresizingMaskIntoConstraints = false
@@ -20,7 +31,7 @@ class NewHabitViewController: UIViewController {
         return name
     }()
     
-    private let tableView: UITableView = {
+    private lazy var tableView: UITableView = {
         let table = UITableView(frame: .zero)
         table.register(TableViewCell.self, forCellReuseIdentifier: "TableViewCell")
         table.separatorStyle = .singleLine
@@ -33,7 +44,7 @@ class NewHabitViewController: UIViewController {
         return table
     }()
     
-    private var colorCollectionView: UICollectionView = {
+    private lazy var colorCollectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.register(ColorCell.self, forCellWithReuseIdentifier: "cell")
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -41,7 +52,7 @@ class NewHabitViewController: UIViewController {
     }()
     var colorCollection: [UIColor] = [.c1, .c2, .c3, .c4, .c5, .c6, .c7, .c8, .c9, .c10, .c11, .c12, .c13, .c14, .c15, .c16, .c17, .c18]
         
-    private let cancelButton: UIButton = {
+    private lazy var cancelButton: UIButton = {
         let cancel = UIButton()
         cancel.setTitle("Отменить", for: .normal)
         cancel.layer.borderWidth = 1
@@ -54,7 +65,7 @@ class NewHabitViewController: UIViewController {
         return cancel
     }()
     
-    private let createButton: UIButton = {
+    private lazy var createButton: UIButton = {
         let create = UIButton()
         create.setTitle("Создать", for: .normal)
         create.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
@@ -65,7 +76,7 @@ class NewHabitViewController: UIViewController {
         return create
     }()
     
-    private var createButtonStackView: UIStackView = {
+    private lazy var createButtonStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.spacing = 8
@@ -129,13 +140,17 @@ class NewHabitViewController: UIViewController {
     @objc
     func cancelButtonClicked() {
         dismiss(animated: false)
+        delegate?.cancelCreatedNewHabbit()
         print("Отменить")
     }
-    
+
     @objc
     func createButtonClicked() {
-        dismiss(animated: false)
         print("Создать")
+        dismiss(animated: false)
+        guard let trackerName = trackerName.text else { return }
+        let newHabbit = Tracker(id: UUID(), color: UIColor(named: "Color selection 8")!, emoji: "💐", text: trackerName, schedule: configuredSchedule)
+        delegate?.createdNewHabbit(tracker: newHabbit)
     }
 }
 
@@ -220,6 +235,17 @@ extension NewHabitViewController: UICollectionViewDelegateFlowLayout {
         let indexPath = IndexPath(row: 0, section: section)
         let headerView = self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader, at: indexPath) //получаем View.
         return headerView.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width, height: UIView.layoutFittingExpandedSize.height), withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel) // Передаем view возможность подсчитать свой размер и вернуть
+    }
+}
+
+extension NewHabitViewController: NewHabitDelegate {
+    func createdNewHabbit(tracker: Tracker) {
+        dismiss(animated: true)
+        delegate?.createdNewHabbit(tracker: tracker)
+    }
+    
+    func cancelCreatedNewHabbit() {
+        dismiss(animated: true)
     }
 }
 
