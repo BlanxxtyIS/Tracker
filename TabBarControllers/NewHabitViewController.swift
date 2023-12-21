@@ -147,10 +147,10 @@ class NewHabitViewController: UIViewController {
     @objc
     func createButtonClicked() {
         print("Создать")
-        dismiss(animated: false)
         guard let trackerName = trackerName.text else { return }
-        let newHabbit = Tracker(id: UUID(), color: UIColor(named: "Color selection 8")!, emoji: "💐", text: trackerName, schedule: configuredSchedule)
-        delegate?.createdNewHabbit(tracker: newHabbit)
+        let newHabit = Tracker(id: UUID(), color: .c13, emoji: "💐", text: trackerName, schedule: configuredSchedule)
+        delegate?.createdNewHabbit(tracker: newHabit)
+        dismiss(animated: false)
     }
 }
 
@@ -238,14 +238,4 @@ extension NewHabitViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
-extension NewHabitViewController: NewHabitDelegate {
-    func createdNewHabbit(tracker: Tracker) {
-        dismiss(animated: true)
-        delegate?.createdNewHabbit(tracker: tracker)
-    }
-    
-    func cancelCreatedNewHabbit() {
-        dismiss(animated: true)
-    }
-}
 

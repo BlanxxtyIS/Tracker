@@ -25,6 +25,9 @@ final class TabBarViewController: UITabBarController {
         let setting = UINavigationController(rootViewController: vc)
         setting.navigationBar.prefersLargeTitles = true
         setting.tabBarItem.title = title
+        let cgColor = UIColor.udGray.cgColor
+        tabBar.layer.borderWidth = 1
+        tabBar.layer.borderColor = cgColor
         setting.tabBarItem.image = image
         setting.viewControllers.first?.navigationItem.title = title
         return setting

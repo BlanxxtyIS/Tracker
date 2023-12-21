@@ -8,14 +8,14 @@
 import UIKit
 //Трекеры
 class TrackersViewController: UIViewController {
-        
+    
     //треккеры которые были выполнены в выбранную дату
     var completedTrackers: [TrackerRecord] = []
     
     var visibleCategories: [TrackerCategory] = []
     
     //список категорий и трекеров в них
-    var categories: [TrackerCategory] = [TrackerCategory(header: "Первый треккер", tracker: [Tracker(id: UUID(), color: .c1, emoji: "🌺", text: "Сдать ревью", schedule: [.friday, .monday, .saturday]), Tracker(id: UUID(), color: .c16, emoji: "😂️️️️️️", text: "мок данные", schedule: [.saturday, .monday])]), TrackerCategory(header: "Уже 15 скоро", tracker: [Tracker(id: UUID(), color: .c4, emoji: "😂️️️️️️", text: "Запутався", schedule: [.thursday, .wednesday, .monday])])]
+    var categories: [TrackerCategory] = [TrackerCategory(header: "Первый треккер", tracker: [Tracker(id: UUID(), color: .c1, emoji: "🌺", text: "Сдать ревью", schedule: [.friday, .monday, .saturday, .thursday]), Tracker(id: UUID(), color: .c16, emoji: "😂️️️️️️", text: "мок данные", schedule: [.friday, .monday])]), TrackerCategory(header: "Уже 15 скоро", tracker: [Tracker(id: UUID(), color: .c4, emoji: "🔥️️️️️️", text: "Запутався", schedule: [.friday, .monday])])]
     
     private let widthParameters = CollectionParameters(cellsNumber: 2, leftInset: 16, rightInset: 16, interCellSpacing: 10)
     
@@ -53,16 +53,22 @@ class TrackersViewController: UIViewController {
         return collectionView
     }()
     
-    private lazy var searchBar: UISearchBar = {
-        let searchBar = UISearchBar()
-        searchBar.translatesAutoresizingMaskIntoConstraints = false
-        searchBar.placeholder = "Поиск"
-        searchBar.searchBarStyle = .minimal
-        searchBar.searchTextField.addTarget(self, action: #selector(didChangeSearchText), for: .allEvents)
-        return searchBar
+    private lazy var searchBar: UISearchTextField = {
+        let textField = UISearchTextField()
+        textField.textColor = .udBlack
+        textField.font = .systemFont(ofSize: 17, weight: .medium)
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.heightAnchor.constraint(equalToConstant: 36).isActive = true
+        
+        let attributes = [NSAttributedString.Key.foregroundColor: UIColor.udGray]
+        let attributedPlaceholder = NSAttributedString(string: "Поиск", attributes: attributes)
+        textField.attributedPlaceholder = attributedPlaceholder
+        textField.delegate = self
+        
+        return textField
     }()
     
-    private let datePicker: UIDatePicker = {
+    private lazy var datePicker: UIDatePicker = {
         let picker = UIDatePicker()
         picker.datePickerMode = .date
         picker.preferredDatePickerStyle = .compact
@@ -80,7 +86,6 @@ class TrackersViewController: UIViewController {
         navBarItem()
         setupCollectionView()
         setupEmptyConstraints()
-        visibleCategories.isEmpty ? showEmptyView() : dismissEmptyView()
     }
     
     //MARK: Setup EmptyView
@@ -123,14 +128,14 @@ class TrackersViewController: UIViewController {
             errorImage.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
             errorText.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             errorText.topAnchor.constraint(equalTo: emptyImage.bottomAnchor, constant: 8),
-            ])
+        ])
     }
     
     func setupCollectionView() {
         setupAllViews()
         setupAllContraints()
     }
-
+    
     private func setupAllViews() {
         view.addSubview(collectionView)
         view.addSubview(searchBar)
@@ -142,8 +147,8 @@ class TrackersViewController: UIViewController {
         NSLayoutConstraint.activate([
             
             searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
-            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
+            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -157,7 +162,7 @@ class TrackersViewController: UIViewController {
         let plusButton = UIBarButtonItem(image: UIImage(systemName: "plus"), style: .plain, target: self, action: #selector(Self.didTapPlusButton))
         plusButton.tintColor = .udBlack
         self.navigationItem.leftBarButtonItem = plusButton
-
+        
         //Дата
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: datePicker)
         
@@ -170,7 +175,8 @@ class TrackersViewController: UIViewController {
         present(viewController, animated: true)
     }
     
-    @objc private func datePickerChanged() {
+    //MARK: - DatePicker
+    @objc func datePickerChanged() {
         visibleCategories = []
         selectedDate = datePicker.date
         for category in categories {
@@ -178,26 +184,30 @@ class TrackersViewController: UIViewController {
             
             for tracker in category.tracker {
                 guard let weekDay = WeekDays(rawValue: calculateWeekDayNumber(for: selectedDate)) else { continue }
-                guard let doesContain = tracker.schedule?.contains(weekDay) else { continue }
+                guard let doesContain = tracker.schedule?.contains(weekDay) else {continue}
                 if doesContain {
                     dateSortedTrackers.append(tracker)
                 }
-                  
+                
+                
             }
             if !dateSortedTrackers.isEmpty {
                 visibleCategories.append(TrackerCategory(header: category.header, tracker: dateSortedTrackers))
             }
         }
-        
         visibleCategories.isEmpty ? showEmptyView() : dismissEmptyView()
         dismissErrorView()
         collectionView.reloadData()
     }
     
-    @objc func didChangeSearchText(search: UISearchBar) {
+    //MARK: - SEARCH
+    private func didChangeSearchText() {
         guard let searchText = searchBar.text,
               !searchText.isEmpty
         else {
+            dismissErrorView()
+            visibleCategories = categories
+            collectionView.reloadData()
             return
         }
         var searchedCategories: [TrackerCategory] = []
@@ -212,11 +222,12 @@ class TrackersViewController: UIViewController {
             if !searchedTrackers.isEmpty {
                 searchedCategories.append(TrackerCategory(header: category.header, tracker: searchedTrackers))
             }
-            visibleCategories = searchedCategories
-            visibleCategories.isEmpty ? showErrorView() : dismissErrorView()
-            dismissEmptyView()
-            collectionView.reloadData()
         }
+        visibleCategories = searchedCategories
+        collectionView.reloadData()
+        visibleCategories.isEmpty ? showErrorView() : dismissErrorView()
+        dismissEmptyView()
+        
     }
     
     private func isMatchRecord(model: TrackerRecord, with trackerId: UUID) -> Bool {
@@ -235,7 +246,7 @@ class TrackersViewController: UIViewController {
         visibleCategories = []
         
         for category in categories {
-            var visibleTrackers: [Tracker] = []
+            var visibleTrackers: Array<Tracker> = []
             
             for tracker in category.tracker {
                 guard let weekDay = WeekDays(rawValue: calculateWeekDayNumber(for: selectedDate)),
@@ -255,22 +266,38 @@ class TrackersViewController: UIViewController {
     }
 }
 
+//MARK: - UITextFieldDelegate
+extension TrackersViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        didChangeSearchText()
+        return true
+    }
+}
 
 //MARK: - UICollectionView
 extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     
+    //размер ячейки
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let availableWidth = collectionView.bounds.width - widthParameters.widthInsets
         let cellWidth = availableWidth / CGFloat(widthParameters.cellsNumber)
-        return CGSize(width: cellWidth, height: 132)
+        return CGSize(width: cellWidth, height: 148)
     }
     
+    //отступы от краев
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 12, left: widthParameters.leftInset, bottom: 8, right: widthParameters.rightInset)
     }
     
+    //вертикальные отступы
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 16
+        return 0
+    }
+    
+    //горизонтальные отступы
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 7
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
@@ -295,6 +322,7 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
         view.titleLabel.text = visibleCategories.isEmpty ? "" : visibleCategories[indexPath.section].header
         return view
     }
+    
 }
 
 extension TrackersViewController: UICollectionViewDataSource {
@@ -318,37 +346,36 @@ extension TrackersViewController: UICollectionViewDataSource {
         let completedDays = completedTrackers.filter { $0.id == tracker.id }.count
 
         cell.delegate = self
-        cell.configure(with: tracker, isCompletedToday: isCompleted, completedDays: completedDays, indexPath: indexPath)
+        
+        let isCompletedToday = isTrackerCompletedToday(id: tracker.id)
+        cell.configure(with: tracker, isCompletedToday: isCompletedToday, completedDays: completedDays, indexPath: indexPath)
 
         return cell
     }
     
     private func isTrackerCompletedToday(id: UUID) -> Bool {
         completedTrackers.contains { trackerRecord in
-            isSameTrackerRecord(trackerRecord: trackerRecord, id: id)
+            let isSameDay = Calendar.current.isDate(trackerRecord.date, inSameDayAs: datePicker.date)
+            return trackerRecord.id == id && isSameDay
         }
     }
 }
 
 //MARK: - TrackersCell
 extension TrackersViewController: TrackersCellDelegate {
-    func competeTracker(id: UUID) {
-        guard currentDate <= Date() else {
-            return
-        }
-        completedTrackers.append(TrackerRecord(id: id, date: currentDate))
-        collectionView.reloadData()
+    
+    func competeTracker(id: UUID, at indexPath: IndexPath) {
+        let trackerRecord = TrackerRecord(id: id, date: datePicker.date)
+        completedTrackers.append(trackerRecord)
+        collectionView.reloadItems(at: [indexPath])
     }
     
-    func uncompleteTracker(id: UUID) {
-        completedTrackers.removeAll { element in
-            if (element.id == id &&  Calendar.current.isDate(element.date, equalTo: currentDate, toGranularity: .day)) {
-                return true
-            } else {
-                return false
-            }
+    func uncompleteTracker(id: UUID, at indexPath: IndexPath ) {
+        completedTrackers.removeAll { trackerRecord in
+            let isSameDay = Calendar.current.isDate(trackerRecord.date, inSameDayAs: datePicker.date)
+            return trackerRecord.id == id && isSameDay
         }
-        collectionView.reloadData()
+        collectionView.reloadItems(at: [indexPath])
     }
     
     private func isSameTrackerRecord(trackerRecord: TrackerRecord, id: UUID) -> Bool {

@@ -9,6 +9,6 @@ import Foundation
 //Для хранения трекеров по категориям.
 
 struct TrackerCategory {
-    var header: String
+    let header: String
     var tracker: [Tracker]
 }

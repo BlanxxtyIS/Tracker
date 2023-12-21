@@ -19,6 +19,8 @@ class ScheduleViewController: UIViewController {
         table.isScrollEnabled = false
         table.layer.masksToBounds = true
         table.layer.cornerRadius = 16
+        let cgColor = UIColor.udWhite.cgColor
+        table.layer.borderColor = cgColor
         table.separatorStyle = .singleLine
         table.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMinYCorner, .layerMaxXMaxYCorner]
         table.translatesAutoresizingMaskIntoConstraints = false
@@ -67,7 +69,7 @@ class ScheduleViewController: UIViewController {
         
             readyButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             readyButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            readyButton.bottomAnchor.constraint(equalTo: safe.bottomAnchor, constant: 0),
+            readyButton.bottomAnchor.constraint(equalTo: safe.bottomAnchor, constant: -16),
             readyButton.heightAnchor.constraint(equalToConstant: 60)])
     }
     @objc func switchChanged(_ sender: UISwitch!) {
@@ -104,7 +106,10 @@ extension ScheduleViewController: UITableViewDataSource {
         switcher.addTarget(self, action: #selector(self.switchChanged(_:)), for: .valueChanged)
         cell.accessoryView = switcher
         
-        cell.heightAnchor.constraint(equalToConstant: 82).isActive = true
+        let height = scheduleTableView.bounds.height / 7
+        print(height)
+        
+        cell.heightAnchor.constraint(equalToConstant: height).isActive = true
         cell.backgroundColor = .udBackground
         return cell
     }

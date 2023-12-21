@@ -9,6 +9,12 @@ import UIKit
 
 class TrackersHeader: UICollectionReusableView {
     
+    private lazy var containerView: UIView = {
+       let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     let titleLabel: UILabel = {
         let title = UILabel()
         title.font = .systemFont(ofSize: 19, weight: .bold)
@@ -19,10 +25,13 @@ class TrackersHeader: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        addSubview(titleLabel)
+        addSubview(containerView)
+        containerView.addSubview(titleLabel)
         
         NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 28),
+            containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            containerView.topAnchor.constraint(equalTo: topAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 28),
             titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor)])
     }
     

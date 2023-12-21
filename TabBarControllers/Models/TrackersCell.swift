@@ -8,13 +8,13 @@
 import UIKit
 
 protocol TrackersCellDelegate: AnyObject {
-    func competeTracker(id: UUID)
-    func uncompleteTracker(id: UUID)
+    func competeTracker(id: UUID, at indexPath: IndexPath)
+    func uncompleteTracker(id: UUID, at indexPath: IndexPath)
 }
 
 final class TrackersCell: UICollectionViewCell {
 
-    var isCompleted: Bool?
+    var isCompletedToday: Bool = false
     var trackerId: UUID?
     var indexPath: IndexPath?
     
@@ -75,25 +75,13 @@ final class TrackersCell: UICollectionViewCell {
     var plusDayButton: UIButton = {
         let button = UIButton(type: .system)
         let pointSize = UIImage.SymbolConfiguration(pointSize: 11)
-        let image = UIImage(systemName: "plus", withConfiguration: pointSize)
         button.tintColor = .udWhite
-        button.setImage(image, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.cornerRadius = 34 / 2
         button.addTarget(self, action: #selector(plusButtonClick), for: .touchUpInside)
         return button
     }()
-    
-    private lazy var readyImage: UIImage = {
-        let image = UIImage(named: "done_icon") ?? UIImage()
-        return image
-    }()
-    
-    private lazy var plusImage: UIImage = {
-        let size = UIImage.SymbolConfiguration(pointSize: 11)
-        let image = UIImage(named: "Plus") ?? UIImage()
-        return image
-    }()
+
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -168,15 +156,14 @@ final class TrackersCell: UICollectionViewCell {
     
     @objc
     func plusButtonClick() {
-        guard let isCompleted = isCompleted,
-              let trackerID = trackerId
-        else {
+        guard let trackerId = trackerId, let indexPath = indexPath else {
+            assertionFailure("Нету айди трекера")
             return
         }
-        if isCompleted {
-            delegate?.uncompleteTracker(id: trackerID)
+        if isCompletedToday {
+            delegate?.uncompleteTracker(id: trackerId, at: indexPath)
         } else {
-            delegate?.competeTracker(id: trackerID)
+            delegate?.competeTracker(id: trackerId, at: indexPath)
 
         }
     }
@@ -188,7 +175,7 @@ final class TrackersCell: UICollectionViewCell {
         indexPath: IndexPath
     ) {
         self.trackerId = tracker.id
-        self.isCompleted = isCompletedToday
+        self.isCompletedToday = isCompletedToday
         self.indexPath = indexPath
         
         colorView.backgroundColor = tracker.color
@@ -197,7 +184,7 @@ final class TrackersCell: UICollectionViewCell {
         emojiImage.text = tracker.emoji
         completionCountDaysText(completedDays: completedDays)
         
-        let image = isCompleted! ? UIImage(systemName: "checkmark") : UIImage(systemName: "plus")
+        let image = isCompletedToday ? UIImage(systemName: "checkmark") : UIImage(systemName: "plus")
         let imageview = UIImageView(image: image)
         
         plusDayButton.backgroundColor = isCompletedToday ? tracker.color.withAlphaComponent(0.3) : tracker.color
