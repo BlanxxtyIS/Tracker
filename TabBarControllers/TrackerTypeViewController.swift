@@ -7,9 +7,15 @@
 
 import UIKit
 
+protocol TrackerTypeViewControllerDelegate: AnyObject {
+    func createNewTracker(traker: Tracker)
+}
+//Трекеры - Тип трекера
 class TrackerTypeViewController: UIViewController {
     
-    private var createHabit: UIButton = {
+    weak var delegate: TrackerTypeViewControllerDelegate?
+    
+    private lazy var createHabit: UIButton = {
         let habit = UIButton()
         habit.setTitle("Привычка", for: .normal)
         habit.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
@@ -20,7 +26,7 @@ class TrackerTypeViewController: UIViewController {
         return habit
     }()
     
-    private var createAnIrregularEvents: UIButton = {
+    private lazy var createAnIrregularEvents: UIButton = {
         let inRegularEvents = UIButton()
         inRegularEvents.setTitle("Нерегулярные события", for: .normal)
         inRegularEvents.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
@@ -31,7 +37,7 @@ class TrackerTypeViewController: UIViewController {
         return inRegularEvents
     }()
     
-    private var createStackView: UIStackView = {
+    private lazy var createStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.spacing = 16
@@ -70,8 +76,9 @@ class TrackerTypeViewController: UIViewController {
     @objc
     func createHabitButton() {
         print("Привычка")
-        let storyboard = UINavigationController(rootViewController: NewHabit())
-        present(storyboard, animated: true)
+        let viewController = NewHabitViewController()
+        viewController.delegate = self
+        present(viewController, animated: true)
     }
     
     @objc
@@ -81,3 +88,15 @@ class TrackerTypeViewController: UIViewController {
         present(storyboard, animated: true)
     }
 }
+
+extension TrackerTypeViewController: NewHabitDelegate {
+    func createdNewHabbit(tracker: Tracker) {
+        dismiss(animated: true)
+        delegate?.createNewTracker(traker: tracker)
+    }
+    
+    func cancelCreatedNewHabbit() {
+        dismiss(animated: true)
+    }
+}
+

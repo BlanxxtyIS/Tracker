@@ -6,15 +6,12 @@
 //
 
 import UIKit
-enum WeekDay: String, CaseIterable {
-    case Понедельник, Вторник, Среда, Четверг, Пятница, Суббота, Воскресенье
-}
 
 class ScheduleViewController: UIViewController {
     
-    let weekDay: [String] = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
+    private let weekDay: [String] = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
     
-    let scheduleTableView: UITableView = {
+    lazy var scheduleTableView: UITableView = {
         let table = UITableView(frame: .zero)
         table.register(TableViewCell.self, forCellReuseIdentifier: "ScheduleTableViewCell")
         table.separatorStyle = .none
@@ -22,12 +19,15 @@ class ScheduleViewController: UIViewController {
         table.isScrollEnabled = false
         table.layer.masksToBounds = true
         table.layer.cornerRadius = 16
+        let cgColor = UIColor.udWhite.cgColor
+        table.layer.borderColor = cgColor
+        table.separatorStyle = .singleLine
         table.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMinYCorner, .layerMaxXMaxYCorner]
         table.translatesAutoresizingMaskIntoConstraints = false
         return table
     }()
     
-    let readyButton: UIButton = {
+    lazy var readyButton: UIButton = {
         let button = UIButton()
         button.setTitle("Готово", for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
@@ -69,7 +69,7 @@ class ScheduleViewController: UIViewController {
         
             readyButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             readyButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            readyButton.bottomAnchor.constraint(equalTo: safe.bottomAnchor, constant: 0),
+            readyButton.bottomAnchor.constraint(equalTo: safe.bottomAnchor, constant: -16),
             readyButton.heightAnchor.constraint(equalToConstant: 60)])
     }
     @objc func switchChanged(_ sender: UISwitch!) {
@@ -79,13 +79,15 @@ class ScheduleViewController: UIViewController {
 }
 
 extension ScheduleViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
     
 }
 
 extension ScheduleViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return weekDay.count
-
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -100,22 +102,17 @@ extension ScheduleViewController: UITableViewDataSource {
         let switcher = UISwitch(frame: .zero)
         switcher.setOn(false, animated: true)
         switcher.tag = indexPath.row
+        switcher.onTintColor = .udBlue
         switcher.addTarget(self, action: #selector(self.switchChanged(_:)), for: .valueChanged)
         cell.accessoryView = switcher
         
-        cell.heightAnchor.constraint(equalToConstant: 82).isActive = true
-        print(requiredHeight)
+        let height = scheduleTableView.bounds.height / 7
+        print(height)
+        
+        cell.heightAnchor.constraint(equalToConstant: height).isActive = true
         cell.backgroundColor = .udBackground
         return cell
     }
 }
 
-extension ScheduleViewController {
-    public var requiredHeight: CGFloat {
-        let table = scheduleTableView
-        table.sizeToFit()
-        print(table.frame.height)
-        return table.frame.height
-    }
-}
 

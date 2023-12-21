@@ -9,7 +9,7 @@ import UIKit
 
 class NewIrregularAction: UIViewController {
     
-    private let backButton: UIButton = {
+    private lazy var backButton: UIButton = {
         let button = UIButton()
         button.setTitle("Назад", for: .normal)
         button.setTitleColor(.udBlack, for: .normal)
