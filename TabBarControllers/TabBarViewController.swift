@@ -16,6 +16,9 @@ final class TabBarViewController: UITabBarController {
     }
     
     private func setupTabBar() {
+        let tabBarTopSeparator = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 1.0))
+        tabBarTopSeparator.backgroundColor = UIColor.udGray
+                tabBar.addSubview(tabBarTopSeparator)
         let tracker = createTabBar(title: "Трекеры", image: UIImage(named: "ic 28x28-2"), vc: TrackersViewController())
         let stats = createTabBar(title: "Статистика", image: UIImage(named: "ic 28x28"), vc: StatisticsViewController())
         setViewControllers([tracker, stats], animated: true)
@@ -25,9 +28,6 @@ final class TabBarViewController: UITabBarController {
         let setting = UINavigationController(rootViewController: vc)
         setting.navigationBar.prefersLargeTitles = true
         setting.tabBarItem.title = title
-        let cgColor = UIColor.udGray.cgColor
-        tabBar.layer.borderWidth = 1
-        tabBar.layer.borderColor = cgColor
         setting.tabBarItem.image = image
         setting.viewControllers.first?.navigationItem.title = title
         return setting
